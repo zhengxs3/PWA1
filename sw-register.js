@@ -1,12 +1,12 @@
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("service-worker.js") // ✅ 注意路径：没有 "/"
+      .register("service-worker.js") // ✅ Attention au chemin : sans "/"
       .then((reg) => {
-        console.log("✅ Service Worker 注册成功", reg);
+        console.log("✅ Service Worker enregistré avec succès", reg);
       })
       .catch((err) => {
-        console.error("❌ 注册失败", err);
+        console.error("❌ Échec de l'enregistrement du Service Worker", err);
       });
   });
 }
