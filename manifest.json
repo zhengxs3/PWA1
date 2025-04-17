@@ -1,5 +1,5 @@
 {
-  "name": "Mon exemple de PWA",
+  "name": "PWA Projet",
   "short_name": "PWA",
   "start_url": "./index.html",
   "display": "standalone",

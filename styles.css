@@ -1,0 +1,91 @@
+header {
+    display: flex;               /* aligne le titre et la cloche sur la même ligne */
+    justify-content: space-between;
+    align-items: center;
+    background: var(--primary);
+    color: #fff;
+    padding: 1rem;
+  }
+  
+  #notify-btn {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: #fff;
+  }
+  
+  #notify-btn:hover {
+    opacity: 0.8;
+  }
+  
+:root {
+    --primary: #317efb;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  header {
+    background: var(--primary);
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  main {
+    flex: 1;
+    padding: 1.5rem;
+  }
+  
+  /* Bannière d'installation */
+  #install-banner {
+    display: none; /* Deviendra flex quand beforeinstallprompt se déclenche */
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid var(--primary);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  #install-banner button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  /* Indicateur de statut réseau */
+  #status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+  }
+  
+  #status.online {
+    color: green;
+  }
+  
+  #status.offline {
+    color: red;
+  }
+  

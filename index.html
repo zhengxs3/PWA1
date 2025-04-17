@@ -1,15 +1,94 @@
 <!DOCTYPE html>
-<html lang="fr"> <!-- Déclare un document HTML5, et indique que la langue de la page est le français -->
-<head>
-  <meta charset="UTF-8" /> <!-- Définit l'encodage des caractères en UTF-8, pour supporter plusieurs langues -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Configure le responsive design pour un bon affichage sur les appareils mobiles -->
-  <title>Mon exemple de PWA</title> <!-- Le titre de la page, affiché dans l'onglet du navigateur -->
-  <link rel="manifest" href="manifest.json" /> <!-- Lien vers le fichier manifest, utilisé pour configurer une Progressive Web App (PWA) -->
-</head>
-<body>
-  <h1>Bienvenue sur mon site PWA 👋</h1> <!-- Titre principal, message de bienvenue sur le site PWA -->
-  <p>Tu peux voir ce message même hors ligne !</p> <!-- Texte indiquant que ce message est visible même sans connexion Internet -->
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#317EFB" />
+    <title>PWA Démo – Accueil</title>
 
-  <script src="sw-register.js"></script> <!-- Charge le fichier JavaScript "sw-register.js" qui enregistre le Service Worker (script permettant les fonctions hors ligne) -->
-</body>
+    <!-- Manifest & icône -->
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>PWA Démo 🚀</h1>
+      <button
+        id="notify-btn"
+        aria-label="Activer les notifications"
+        title="Activer les notifications"
+      >
+        🔔
+      </button>
+    </header>
+
+    <main>
+      <p>
+        Bienvenue ! Cette page d'accueil est conçue pour démontrer les
+        <strong>fonctionnalités essentielles d'une Progressive Web App</strong>.
+      </p>
+      <ul>
+        <li>Fonctionne hors‑ligne (grâce au Service Worker).</li>
+        <li>Peut être <em>installée</em> sur l'écran d'accueil.</li>
+        <li>Affiche l'état du réseau en direct.</li>
+        <li>Permet de recevoir des notifications push.</li>
+      </ul>
+      <p id="network-info">
+        Statut réseau : <span id="status" class="offline">hors‑ligne</span>
+      </p>
+    </main>
+
+    <!-- Bannière d'installation personnalisée -->
+    <div id="install-banner">
+      <span>Installer l'application ?</span>
+      <button id="install-btn">Installer</button>
+    </div>
+
+    <!-- Script d'enregistrement du Service Worker & logiques PWA -->
+    <script src="sw-register.js"></script>
+    <script>
+      // Indicateur réseau
+      const statusEl = document.getElementById("status");
+      function updateOnlineStatus() {
+        const online = navigator.onLine;
+        statusEl.textContent = online ? "en ligne" : "hors‑ligne";
+        statusEl.className = online ? "online" : "offline";
+      }
+      window.addEventListener("online", updateOnlineStatus);
+      window.addEventListener("offline", updateOnlineStatus);
+      updateOnlineStatus();
+
+      // Bouton cloche notifications
+      const btn = document.getElementById("notify-btn");
+      btn.addEventListener("click", async () => {
+        if (!("Notification" in window)) {
+          alert(
+            "Les notifications ne sont pas prises en charge sur ce navigateur."
+          );
+          return;
+        }
+
+        let perm = Notification.permission;
+        if (perm === "default") {
+          perm = await Notification.requestPermission();
+        }
+
+        if (perm === "granted") {
+          // Test : affiche une notification locale (si service‑worker déjà actif)
+          if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+              action: "test-notif",
+            });
+          } else {
+            alert(
+              "Service Worker non actif pour l’instant. Recharge la page puis réessaie."
+            );
+          }
+        } else {
+          alert("Notifications refusées ; impossible d’activer.");
+        }
+      });
+    </script>
+  </body>
 </html>
