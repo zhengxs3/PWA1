@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "web-push": "^3.6.7"
+  },
+  "name": "pwa",
+  "version": "1.0.0",
+  "main": "service-worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhengxs3/PWA1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhengxs3/PWA1/issues"
+  },
+  "homepage": "https://github.com/zhengxs3/PWA1#readme",
+  "description": ""
+}

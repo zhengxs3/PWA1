@@ -19,7 +19,14 @@
         aria-label="Activer les notifications"
         title="Activer les notifications"
       >
-        🔔
+        🔔 Notif immédiate
+      </button>
+      <button
+        id="delayed-notify-btn"
+        aria-label="Tester notification différée"
+        title="Tester notification avec délai"
+      >
+        ⏱️ Notif après 2 sec
       </button>
     </header>
 
@@ -59,34 +66,54 @@
       window.addEventListener("offline", updateOnlineStatus);
       updateOnlineStatus();
 
-      // Bouton cloche notifications
+      // Bouton cloche notifications immédiates
       const btn = document.getElementById("notify-btn");
       btn.addEventListener("click", async () => {
+        console.log("🔔 Bouton cliqué");
+
         if (!("Notification" in window)) {
-          alert(
-            "Les notifications ne sont pas prises en charge sur ce navigateur."
-          );
+          alert("Notifications non prises en charge");
           return;
         }
 
         let perm = Notification.permission;
+        console.log("🔔 Permission actuelle :", perm);
+
         if (perm === "default") {
           perm = await Notification.requestPermission();
+          console.log("🔔 Permission après requête :", perm);
         }
 
         if (perm === "granted") {
-          // Test : affiche une notification locale (si service‑worker déjà actif)
-          if (navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({
-              action: "test-notif",
-            });
+          const reg = await navigator.serviceWorker.ready;
+          console.log("🔔 Service worker prêt ?", reg);
+
+          if (reg && reg.active) {
+            console.log("🔔 Envoi message test-notif au SW");
+            reg.active.postMessage({ action: "test-notif" });
           } else {
-            alert(
-              "Service Worker non actif pour l’instant. Recharge la page puis réessaie."
-            );
+            console.warn("❌ Service Worker non actif");
           }
         } else {
           alert("Notifications refusées ; impossible d’activer.");
+        }
+      });
+
+      // Bouton notification différée (2s)
+      const delayBtn = document.getElementById("delayed-notify-btn");
+      delayBtn.addEventListener("click", async () => {
+        console.log("⏱️ Bouton notif différée cliqué");
+
+        if (Notification.permission !== 'granted') {
+          await Notification.requestPermission();
+        }
+
+        const reg = await navigator.serviceWorker.ready;
+        if (reg && reg.active) {
+          console.log("⏱️ Envoi du message différé dans 2s");
+          setTimeout(() => {
+            reg.active.postMessage({ action: "test-notif" });
+          }, 2000);
         }
       });
     </script>
